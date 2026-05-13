@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { FaCartArrowDown } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/hook";
 import { ProductAction } from "../../../../store/ProductSlice";
 import { CartActions } from "../../../../store/cartSlice";
 import { useNavigate } from "react-router-dom";
 
 const Products = () => {
-  const product = useSelector((state: RootState) => state.product.productItem);
-  // const user = useSelector((state: RootState) => state.auth.user);
-  const dispatch = useDispatch();
+  const product = useAppSelector((state: RootState) => state.product.productItem);
+  // const user = useAppSelector((state: RootState) => state.auth.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = localStorage.getItem("user");
   
@@ -34,7 +34,7 @@ const Products = () => {
     }
   };
 
-  const stockFull = useSelector((state: RootState) => state.product.stockFull);
+  const stockFull = useAppSelector((state: RootState) => state.product.stockFull);
 
   useEffect(() => {
   if (stockFull === true) {

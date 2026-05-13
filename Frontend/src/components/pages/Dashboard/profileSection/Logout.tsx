@@ -1,20 +1,23 @@
 import React from 'react'
-import { CgProfile } from 'react-icons/cg'
+import { MdLogout } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../../hooks/hook';
+import { logout } from '../../../../store/authSlice';
 
 const Logout = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleLagout = async() => {
-    
-    
+    dispatch(logout());
+    localStorage.removeItem("token");
     navigate('/');
   }
   return (
     <>
-    <div className='flex items-center gap-2 hover:bg-[#F5F5F5] cursor-pointer p-2 rounded-md' onClick={handleLagout}>
-        <CgProfile className='text-2xl' />
+    <div className='flex cursor-pointer items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition-all duration-200 hover:border-red-200 hover:bg-red-100 hover:shadow-sm' onClick={handleLagout}>
+        <MdLogout className='text-xl' />
       <h1>Logout</h1>
-    </div >
+    </div>
     </>
   )
 }

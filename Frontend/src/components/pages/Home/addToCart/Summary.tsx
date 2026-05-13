@@ -1,8 +1,8 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../../hooks/hook'
 
 const Summary = () => {
-  const summarySubTotalPrice = useSelector((state: RootState) => state?.cart.summarySubTotalPrice)
+  const summarySubTotalPrice = useAppSelector((state: RootState) => state?.cart.summarySubTotalPrice)
   return (
     <div className='w-full md:max-w-[300px] min-h-[250px] border-[3px] my-4 ml-auto flex flex-col justify-between px-5 py-7'>
       <h1 className='font-semibold tracking-wide text-lg'>Selected Offer Summary</h1>

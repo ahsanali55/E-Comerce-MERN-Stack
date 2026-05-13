@@ -1,6 +1,6 @@
 import React from "react";
 import { FaCartArrowDown } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/hook";
 import { FaHome } from "react-icons/fa";
 import { RiAlignItemRightFill } from "react-icons/ri";
 import { MdRoundaboutRight } from "react-icons/md";
@@ -12,9 +12,9 @@ import { NavbarActions } from "../../../../store/navSlice";
 import IsShow from "./IsShow";
 
 const SideBar = () => {
-  const cart = useSelector((state: RootState) => state.cart);
-  const isShow = useSelector((state: RootState) => state.navbar.isShow);
-  const dispatch = useDispatch();
+  const cart = useAppSelector((state: RootState) => state.cart);
+  const isShow = useAppSelector((state: RootState) => state.navbar.isShow);
+  const dispatch = useAppDispatch();
 
   const handleHideSidebar = () => {
     dispatch(NavbarActions.ShowSideBar());

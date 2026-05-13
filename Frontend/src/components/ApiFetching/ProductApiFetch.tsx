@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/hook";
 import { ProductAction } from "../../store/ProductSlice";
 
 const ProductApiFetch = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   // console.log(dispatch)
 
   useEffect(() => {

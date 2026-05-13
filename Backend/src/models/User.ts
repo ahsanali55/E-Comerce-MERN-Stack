@@ -1,4 +1,4 @@
- import mongoose from "mongoose";
+import mongoose from "mongoose";
 
 export interface IUser extends Document {
   firstName: string;
@@ -6,9 +6,13 @@ export interface IUser extends Document {
   email: string;
   password?: string; // optional because of social login
   provider: "local" | "google" | "facebook";
-}
+  avatar?: string;
+  googleId?: string;
+  facebookId?: string;
+  displayName: string;
+};
 
- const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
@@ -30,6 +34,10 @@ export interface IUser extends Document {
     type: String,
     enum: ["local", "google", "facebook"],
     default: "local",
-  }
- }, {timestamps: true});
- export default mongoose.model<IUser>("User", userSchema);
+  },
+  avatar: String,
+  googleId: { type: String, sparse: true },
+  facebookId: { type: String, sparse: true },
+  displayName: { type: String, required: true },
+}, { timestamps: true });
+export default mongoose.model<IUser>("User", userSchema);

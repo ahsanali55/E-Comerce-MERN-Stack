@@ -1,10 +1,10 @@
 import React from "react";
 import Products from "./Products";
 import LoadingSpiner from "./LoadingSpiner";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../hooks/hook";
 
 const ProductsContainer = () => {
-  const isfetch = useSelector((state: RootState) => state.product.isfetch);
+  const isfetch = useAppSelector((state: RootState) => state.product.isfetch);
   return (
     <div className="w-full bg-[#f7f7f7] relative ">
       <div className="mx-auto w-11/12 max-w-[1080px] h-full p-2 md:p-4">

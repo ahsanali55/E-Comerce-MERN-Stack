@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/hook";
 import { CartActions } from "../../../../store/cartSlice";
 import { ProductAction } from "../../../../store/ProductSlice";
 
 const Items = () => {
-  const { cartItem, stockFull } = useSelector((state: RootState) => state.cart);
+  const { cartItem, stockFull } = useAppSelector((state: RootState) => state.cart);
   console.log("Item at Cartssss: ", cartItem);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleRemove = (item) => {
     dispatch(CartActions.removeItemFromCArt(item));

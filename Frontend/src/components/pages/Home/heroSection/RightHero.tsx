@@ -1,8 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../hooks/hook";
 
 const RightHero = () => {
-  const heroValue = useSelector((state: RootState) => state.hero)
+  const heroValue = useAppSelector((state: RootState) => state.hero)
   return (
     <div className="w-full relative"
     data-aos="fade-up"

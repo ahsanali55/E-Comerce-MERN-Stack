@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../../../hooks/hook";
 import { GiHamburgerMenu } from "react-icons/gi";
 import SideBar from "./SideBar";
 import RightNav from "./RightNav";
@@ -7,7 +7,7 @@ import LeftNav from "./LeftNav";
 import { NavbarActions } from "../../../../store/navSlice";
 
 const NavBar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSidebar = () => {
     dispatch(NavbarActions.ShowSideBar());

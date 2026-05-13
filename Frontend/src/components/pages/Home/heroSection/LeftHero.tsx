@@ -1,9 +1,9 @@
 import React from "react";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../hooks/hook";
 import { Link } from "react-router-dom";
 const LeftHero = () => {
-  const heroValue = useSelector((state: RootState) => state.hero);
+  const heroValue = useAppSelector((state: RootState) => state.hero);
 
   return (
     <div className="w-full  space-y-4 " 

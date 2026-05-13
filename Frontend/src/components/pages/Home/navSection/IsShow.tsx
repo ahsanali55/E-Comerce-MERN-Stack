@@ -1,10 +1,10 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/hook";
 import { NavbarActions } from "../../../../store/navSlice";
 
 const IsShow = () => {
-  const isShow = useSelector((state: RootState) => state.navbar.isShow);
-  const dispatch = useDispatch();
+  const isShow = useAppSelector((state: RootState) => state.navbar.isShow);
+  const dispatch = useAppDispatch();
 
   const handleHideSidebar = () => {
     console.log("Clicked")

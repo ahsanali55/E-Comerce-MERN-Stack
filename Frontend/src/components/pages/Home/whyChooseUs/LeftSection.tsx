@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../hooks/hook";
 import AOS from "aos";
 
 const LeftSection = () => {
-  const left = useSelector((state: RootState) => state.whyChoose.left);
+  const left = useAppSelector((state: RootState) => state.whyChoose.left);
   useEffect(() => {
     AOS.init({ duration: 1000, easing: "ease-in-out",  });
   }, []);

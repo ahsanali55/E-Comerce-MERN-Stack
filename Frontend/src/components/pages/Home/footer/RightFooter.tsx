@@ -1,8 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../hooks/hook";
 
 const RightFooter = () => {
-  const footerValue = useSelector((state: RootState) => state.footer);
+  const footerValue = useAppSelector((state: RootState) => state.footer);
   return (
     <div className="w-full grid grid-cols-2 md:grid-cols-3 mt-7 gap-4 md:gap-0 justify-between ">
       {

@@ -1,8 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../hooks/hook";
 
 const Sale = () => {
-  const saleValue = useSelector((state: RootState) => state.sale);
+  const saleValue = useAppSelector((state: RootState) => state.sale);
   //   console.log(saleValue);
   return (
     <div className="w-full grid grid-cols-1  lg:grid-cols-3 gap-4 lg:gap-0 overflow-hidden">
