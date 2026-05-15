@@ -3,13 +3,13 @@ import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
 
 
-// Extend Request type
-export interface AuthRequest extends Request {
-  user?: IUser;
-}
+// // Extend Request type
+// export interface AuthRequest extends Request {
+//   user?: IUser;
+// }
 
 export const protect = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -32,7 +32,7 @@ export const protect = async (
         return res.status(401).json({message: "User not found"});
       }
       // Attach user to request
-      req.user = user
+      (req as any).user = user;
 
       next();
 

@@ -3,16 +3,15 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/authRoutes";
-
-
-
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
 
 // Middlewars 
-app.use(cors());
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Test route
 app.get('/', (req, res) => {

@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../models/User";
+import User, { IUser } from "../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { AuthRequest } from "../middleware/authMiddleware";
+import passport from "passport";
+import { issueJWT } from "../helpers/jwt";
+
 
 // Generate Jwt Token for every new user
 const generateToken = (id: string) => {
@@ -12,7 +14,25 @@ const generateToken = (id: string) => {
   }
   );
 }
+// ── Google ──────────────────────────────────────────────
+export const googleAuthUser =  (req: Request, res: Response) => {
+  passport.authenticate("google", { scope: ['profile', 'email'], session: false});
+}
+export const googlecallBackAuthUser =  [ passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  (req: Request, res: Response) => {
+    const token = issueJWT(req.user as IUser);
 
+    // Store token in cookie (optional, for better security)
+    res.cookie("token", token, {
+      httpOnly: true, 
+      secure: false, // false in local development if using http
+      sameSite: "lax", // adjust based on your client-server setup
+    });
+
+    // Send token via  httpOnly cookie 
+    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+  }
+];
 // Register User
 export const registerUser = async (req: Request, res: Response) => {
   // handling request
@@ -79,9 +99,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
 }
 
-export const profile = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const profile = (req: Request, res: Response, next: NextFunction) => {
   res.json({
     message: "login successfull",
-    user: req.user,
+    user: (req as any).user,
   })
 }
