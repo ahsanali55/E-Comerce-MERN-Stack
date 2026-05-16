@@ -10,6 +10,7 @@ export interface IUser extends Document {
   googleId?: string;
   facebookId?: string;
   displayName: string;
+   refreshToken?: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -57,6 +58,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    refreshToken: { type: String },
   },
   { timestamps: true }
 );

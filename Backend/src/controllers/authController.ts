@@ -3,7 +3,77 @@ import User, { IUser } from "../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import { issueJWT } from "../helpers/jwt";
+
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt";
+
+const COOKIE_OPTS = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const }
+
+// Generate Jwt Token for every new user
+function issueTokens(res: Response, user: IUser) {
+  const payload = { userId: user.id, email: user.email };
+  const accessToken = signAccessToken(payload);
+  const refreshToken = signRefreshToken(payload);
+
+  // Persist refresh token in database
+  user.refreshToken = refreshToken;
+  user.save();
+
+  // Store refresh token in cookie (optional, for better security)
+  res.cookie("refreshToken", refreshToken, { ...COOKIE_OPTS, maxAge: 7 * 24 * 60 * 60 * 1000 });
+  return accessToken;
+
+}
+
+
+// ── Google ──────────────────────────────────────────────
+export const googleAuthUser = (req: Request, res: Response) => {
+  passport.authenticate('google', { scope: ['profile', 'email'], session: false })
+};
+
+export const googlecallBackAuthUser = [passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+(req: Request, res: Response) => {
+  const accessToken = issueTokens(res, req.user as IUser);
+  res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${accessToken}`);
+}
+];
+
+export const facebookAuthUser = (req: Request, res: Response) => {
+  passport.authenticate('facebook', { scope: ['email'], session: false });
+}
+export const facebookCallBackAuthUser = [passport.authenticate('facebook', { session: false, failureRedirect: '/login' }),
+(req: Request, res: Response) => {
+  const accessToken = issueTokens(res, req.user as IUser);
+  res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${accessToken}`);
+}
+]
+
+export const refreshAccessToken = async (req: Request, res: Response) => {
+  const token = req.cookies?.refreshToken;
+  if (!token) return res.status(401).json({ message: 'No refresh token' });
+  try {
+    const payload = verifyRefreshToken(token);
+    const user = await User.findById(payload.userId);
+    if (!user || user.refreshToken !== token) return res.status(403).json({ message: 'Invalid token' });
+    const newAccess = signAccessToken({ userId: user.id, email: user.email });
+    res.json({ accessToken: newAccess });
+  } catch {
+    res.status(403).json({ message: 'Token expired or invalid' });
+  }
+}
+
+export const logoutUser = async (req: Request, res: Response) => {
+  const token = req.cookies?.refreshToken;
+  if (token) {
+    const user = await User.findOne({ refreshToken: token });
+    if (user) {
+      user.refreshToken = undefined;
+      await user.save();
+    }
+    res.clearCookie("refreshToken", COOKIE_OPTS);
+    res.json({ message: "Logged out successfully" });
+  }
+}
+
 
 
 // Generate Jwt Token for every new user
@@ -14,25 +84,6 @@ const generateToken = (id: string) => {
   }
   );
 }
-// ── Google ──────────────────────────────────────────────
-export const googleAuthUser =  (req: Request, res: Response) => {
-  passport.authenticate("google", { scope: ['profile', 'email'], session: false});
-}
-export const googlecallBackAuthUser =  [ passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-  (req: Request, res: Response) => {
-    const token = issueJWT(req.user as IUser);
-
-    // Store token in cookie (optional, for better security)
-    res.cookie("token", token, {
-      httpOnly: true, 
-      secure: false, // false in local development if using http
-      sameSite: "lax", // adjust based on your client-server setup
-    });
-
-    // Send token via  httpOnly cookie 
-    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
-  }
-];
 // Register User
 export const registerUser = async (req: Request, res: Response) => {
   // handling request
